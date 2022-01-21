@@ -9,7 +9,7 @@ function loadScreen(signOut, user) {
 		<div className="App">
 			<header className="App-header">
 				<img src={logo} className="App-logo" alt="logo" />
-				<p>Hey {user.username}, welcome to Spoons!</p>
+				<p>Hey {user.username}, welcome to Quizzards!</p>
 				<button onClick={signOut}>Sign out</button>
 			</header>
 		</div>
