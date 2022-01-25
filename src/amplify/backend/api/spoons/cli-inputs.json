@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "spoons",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "C:\\Users\\Colin\\software\\capstone\\spoons\\spoons\\amplify\\backend\\api\\spoons\\schema.graphql",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 7
+    }
+  }
+}
