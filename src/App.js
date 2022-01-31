@@ -1,17 +1,26 @@
 import React, { useState, useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { API } from "aws-amplify";
+import { API, Auth } from "aws-amplify";
 import { withAuthenticator, Authenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 
-import { listNotes } from "./graphql/queries";
-import {
-	createNote as createNoteMutation,
-	deleteNote as deleteNoteMutation,
-} from "./graphql/mutations";
+import { DataStore } from "@aws-amplify/datastore";
+import { Post, Comment, Chat } from "./models";
 
-const initialFormState = { name: "", description: "" };
+/*import { listPosts } from "./graphql/queries";
+import {
+	createPost as createPostMutation,
+	deletePost as deletePostMutation,
+} from "./graphql/mutations";
+*/
+
+const initialFormState = {
+	title: "",
+	user: "",
+	description: "",
+	Comments: [],
+};
 
 function loadScreen(signOut, user) {
 	return (
@@ -25,7 +34,7 @@ function loadScreen(signOut, user) {
 	);
 }
 
-function NotesPage(signOut, user) {
+function NotesPage(signOut) {
 	const [notes, setNotes] = useState([]);
 	const [formData, setFormData] = useState(initialFormState);
 
@@ -34,38 +43,46 @@ function NotesPage(signOut, user) {
 	}, []);
 
 	async function fetchNotes() {
-		const apiData = await API.graphql({ query: listNotes });
-		setNotes(apiData.data.listNotes.items);
+		//const apiData = await API.graphql({ query: listPosts });
+		const models = await DataStore.query(Post);
+		setNotes(models);
 	}
 
 	async function createNote() {
-		if (!formData.name || !formData.description) return;
-		await API.graphql({
-			query: createNoteMutation,
-			variables: { input: formData },
-		});
+		/*
+			id: ID!
+  			title: String!
+  			user: String!
+  			description: String
+		*/
+		if (!formData.title) return;
+		formData.user = (await Auth.currentAuthenticatedUser()).username;
+		console.log(formData.user);
+		await DataStore.save(new Post(formData));
 		setNotes([...notes, formData]);
 		setFormData(initialFormState);
+		console.log(notes);
 	}
 
 	async function deleteNote({ id }) {
-		const newNotesArray = notes.filter((note) => note.id !== id);
-		setNotes(newNotesArray);
-		await API.graphql({
-			query: deleteNoteMutation,
-			variables: { input: { id } },
-		});
+		console.log(id);
+		const newPostsArray = notes.filter((note) => note.id !== id);
+		setNotes(newPostsArray);
+		console.log(newPostsArray);
+		const modelToDelete = await DataStore.query(Post, id);
+		console.log(modelToDelete);
+		await DataStore.delete(modelToDelete);
 	}
 
 	return (
 		<div className="App">
 			<h1>My Notes App</h1>
-			<p>Hey {user.username}, welcome to Quizzards!</p>
+			<p>Hey {/*Auth.currentAuthenticatedUser()*/}, welcome to Quizzards!</p>
 			<button onClick={signOut}>Sign out</button>
 			<input
-				onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-				placeholder="Note name"
-				value={formData.name}
+				onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+				placeholder="Post title"
+				value={formData.title}
 			/>
 			<input
 				onChange={(e) =>
@@ -75,10 +92,21 @@ function NotesPage(signOut, user) {
 				value={formData.description}
 			/>
 			<button onClick={createNote}>Create Note</button>
+
+			<button
+				onClick={() => {
+					fetchNotes();
+					console.log(notes);
+				}}
+			>
+				log
+			</button>
 			<div style={{ marginBottom: 30 }}>
 				{notes.map((note) => (
 					<div key={note.id || note.name}>
-						<h2>{note.name}</h2>
+						<h2>
+							{note.title} by {note.user}
+						</h2>
 						<p>{note.description}</p>
 						<button onClick={() => deleteNote(note)}>Delete note</button>
 					</div>
@@ -90,9 +118,7 @@ function NotesPage(signOut, user) {
 
 function App() {
 	return (
-		<Authenticator>
-			{({ signOut, user }) => NotesPage(signOut, user)}
-		</Authenticator>
+		<Authenticator>{({ signOut, user }) => NotesPage(signOut)}</Authenticator>
 	);
 }
 

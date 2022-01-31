@@ -3,10 +3,25 @@
   "serviceConfiguration": {
     "apiName": "spoons",
     "serviceName": "AppSync",
-    "gqlSchemaPath": "C:\\Users\\Colin\\software\\capstone\\spoons\\spoons\\amplify\\backend\\api\\spoons\\schema.graphql",
+    "gqlSchemaPath": "/tmp/amplify-49cd6484-718b-4765-950b-947d1f749201/amplify/backend/api/spoons/schema.graphql",
     "defaultAuthType": {
       "mode": "API_KEY",
-      "expirationTime": 7
+      "keyDescription": "api key description",
+      "expirationTime": 30
+    },
+    "additionalAuthTypes": [
+      {
+        "mode": "AWS_IAM"
+      },
+      {
+        "mode": "AMAZON_COGNITO_USER_POOLS",
+        "cognitoUserPoolId": "authspoons49913a44"
+      }
+    ],
+    "conflictResolution": {
+      "defaultResolutionStrategy": {
+        "type": "AUTOMERGE"
+      }
     }
   }
 }
