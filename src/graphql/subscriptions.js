@@ -2,22 +2,24 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreatePost = /* GraphQL */ `
-  subscription OnCreatePost {
-    onCreatePost {
+  subscription OnCreatePost($owner: String) {
+    onCreatePost(owner: $owner) {
       id
       title
       user
       description
+      image
       comments {
         items {
           id
           content
+          postID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          postCommentsId
+          owner
         }
         nextToken
         startedAt
@@ -27,26 +29,29 @@ export const onCreatePost = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
 export const onUpdatePost = /* GraphQL */ `
-  subscription OnUpdatePost {
-    onUpdatePost {
+  subscription OnUpdatePost($owner: String) {
+    onUpdatePost(owner: $owner) {
       id
       title
       user
       description
+      image
       comments {
         items {
           id
           content
+          postID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          postCommentsId
+          owner
         }
         nextToken
         startedAt
@@ -56,26 +61,29 @@ export const onUpdatePost = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
 export const onDeletePost = /* GraphQL */ `
-  subscription OnDeletePost {
-    onDeletePost {
+  subscription OnDeletePost($owner: String) {
+    onDeletePost(owner: $owner) {
       id
       title
       user
       description
+      image
       comments {
         items {
           id
           content
+          postID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          postCommentsId
+          owner
         }
         nextToken
         startedAt
@@ -85,12 +93,13 @@ export const onDeletePost = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
 export const onCreateComment = /* GraphQL */ `
-  subscription OnCreateComment {
-    onCreateComment {
+  subscription OnCreateComment($owner: String) {
+    onCreateComment(owner: $owner) {
       id
       content
       post {
@@ -98,6 +107,7 @@ export const onCreateComment = /* GraphQL */ `
         title
         user
         description
+        image
         comments {
           nextToken
           startedAt
@@ -107,19 +117,21 @@ export const onCreateComment = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
       }
+      postID
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      postCommentsId
+      owner
     }
   }
 `;
 export const onUpdateComment = /* GraphQL */ `
-  subscription OnUpdateComment {
-    onUpdateComment {
+  subscription OnUpdateComment($owner: String) {
+    onUpdateComment(owner: $owner) {
       id
       content
       post {
@@ -127,6 +139,7 @@ export const onUpdateComment = /* GraphQL */ `
         title
         user
         description
+        image
         comments {
           nextToken
           startedAt
@@ -136,19 +149,21 @@ export const onUpdateComment = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
       }
+      postID
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      postCommentsId
+      owner
     }
   }
 `;
 export const onDeleteComment = /* GraphQL */ `
-  subscription OnDeleteComment {
-    onDeleteComment {
+  subscription OnDeleteComment($owner: String) {
+    onDeleteComment(owner: $owner) {
       id
       content
       post {
@@ -156,6 +171,7 @@ export const onDeleteComment = /* GraphQL */ `
         title
         user
         description
+        image
         comments {
           nextToken
           startedAt
@@ -165,13 +181,15 @@ export const onDeleteComment = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
       }
+      postID
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      postCommentsId
+      owner
     }
   }
 `;

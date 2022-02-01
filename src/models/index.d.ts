@@ -21,6 +21,7 @@ export declare class Post {
   readonly title: string;
   readonly user: string;
   readonly description?: string;
+  readonly image?: string;
   readonly comments?: (Comment | null)[];
   readonly createdAt?: string;
   readonly updatedAt?: string;

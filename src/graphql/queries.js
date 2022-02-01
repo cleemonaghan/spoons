@@ -8,16 +8,18 @@ export const getPost = /* GraphQL */ `
       title
       user
       description
+      image
       comments {
         items {
           id
           content
+          postID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          postCommentsId
+          owner
         }
         nextToken
         startedAt
@@ -27,6 +29,7 @@ export const getPost = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
@@ -42,6 +45,7 @@ export const listPosts = /* GraphQL */ `
         title
         user
         description
+        image
         comments {
           nextToken
           startedAt
@@ -51,6 +55,7 @@ export const listPosts = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
       }
       nextToken
       startedAt
@@ -75,6 +80,7 @@ export const syncPosts = /* GraphQL */ `
         title
         user
         description
+        image
         comments {
           nextToken
           startedAt
@@ -84,6 +90,7 @@ export const syncPosts = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
       }
       nextToken
       startedAt
@@ -100,6 +107,7 @@ export const getComment = /* GraphQL */ `
         title
         user
         description
+        image
         comments {
           nextToken
           startedAt
@@ -109,13 +117,15 @@ export const getComment = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
       }
+      postID
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      postCommentsId
+      owner
     }
   }
 `;
@@ -134,18 +144,21 @@ export const listComments = /* GraphQL */ `
           title
           user
           description
+          image
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
+          owner
         }
+        postID
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        postCommentsId
+        owner
       }
       nextToken
       startedAt
@@ -173,18 +186,21 @@ export const syncComments = /* GraphQL */ `
           title
           user
           description
+          image
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
+          owner
         }
+        postID
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        postCommentsId
+        owner
       }
       nextToken
       startedAt

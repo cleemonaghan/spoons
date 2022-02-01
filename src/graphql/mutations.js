@@ -11,16 +11,18 @@ export const createPost = /* GraphQL */ `
       title
       user
       description
+      image
       comments {
         items {
           id
           content
+          postID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          postCommentsId
+          owner
         }
         nextToken
         startedAt
@@ -30,6 +32,7 @@ export const createPost = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
@@ -43,16 +46,18 @@ export const updatePost = /* GraphQL */ `
       title
       user
       description
+      image
       comments {
         items {
           id
           content
+          postID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          postCommentsId
+          owner
         }
         nextToken
         startedAt
@@ -62,6 +67,7 @@ export const updatePost = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
@@ -75,16 +81,18 @@ export const deletePost = /* GraphQL */ `
       title
       user
       description
+      image
       comments {
         items {
           id
           content
+          postID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          postCommentsId
+          owner
         }
         nextToken
         startedAt
@@ -94,6 +102,7 @@ export const deletePost = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
@@ -110,6 +119,7 @@ export const createComment = /* GraphQL */ `
         title
         user
         description
+        image
         comments {
           nextToken
           startedAt
@@ -119,13 +129,15 @@ export const createComment = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
       }
+      postID
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      postCommentsId
+      owner
     }
   }
 `;
@@ -142,6 +154,7 @@ export const updateComment = /* GraphQL */ `
         title
         user
         description
+        image
         comments {
           nextToken
           startedAt
@@ -151,13 +164,15 @@ export const updateComment = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
       }
+      postID
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      postCommentsId
+      owner
     }
   }
 `;
@@ -174,6 +189,7 @@ export const deleteComment = /* GraphQL */ `
         title
         user
         description
+        image
         comments {
           nextToken
           startedAt
@@ -183,13 +199,15 @@ export const deleteComment = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
       }
+      postID
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      postCommentsId
+      owner
     }
   }
 `;
