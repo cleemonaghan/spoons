@@ -36,6 +36,7 @@ function loadScreen(signOut, user) {
 }
 
 function NotesPage(signOut) {
+	const [user, setUser] = useState({ user: "" });
 	//local varaiable holding all the posts we need to display
 	const [notes, setNotes] = useState([]);
 	//variable holding all the data entered in theform fields
@@ -43,8 +44,14 @@ function NotesPage(signOut) {
 
 	//fetch the posts at the beginning
 	useEffect(() => {
+		getUser();
 		fetchPosts();
 	}, []);
+
+	async function getUser() {
+		let username = (await Auth.currentAuthenticatedUser()).username;
+		setUser({ user: username });
+	}
 
 	async function fetchPosts() {
 		//fetch all the Posts
@@ -88,7 +95,7 @@ function NotesPage(signOut) {
 		//if the User did not enter a title, don't create a post
 		if (!formData.title) return;
 		//get the User's username and add it to the form data
-		formData.user = (await Auth.currentAuthenticatedUser()).username;
+		formData.user = user.user;
 		//create a new Post using the form data
 		await API.graphql({
 			query: createPostMutation,
@@ -122,10 +129,59 @@ function NotesPage(signOut) {
 		});
 	}
 
+	function MakePost(props) {
+		const data = props.data;
+		//if it is not this User's post, don't allow them to delete it
+		if (user.user === data.user) {
+			return (
+				<div
+					key={data.id || data.name}
+					style={{
+						backgroundColor: "lightBlue",
+						width: 600,
+						marginLeft: "auto",
+						marginRight: "auto",
+					}}
+				>
+					<h2>
+						{data.title} by {data.user}
+					</h2>
+					<p>{data.description}</p>
+
+					<button onClick={() => deleteNote(data)}>Delete note</button>
+					{data.image && <img src={data.image} style={{ width: 400 }} />}
+
+					<p>{new Date(data.createdAt).toString()}</p>
+				</div>
+			);
+		} else {
+			//console.log("B");
+			return (
+				<div
+					key={data.id || data.name}
+					style={{
+						backgroundColor: "lightBlue",
+						width: 600,
+						marginLeft: "auto",
+						marginRight: "auto",
+					}}
+				>
+					<h2>
+						{data.title} by {data.user}
+					</h2>
+					<p>{data.description}</p>
+					{data.image && <img src={data.image} style={{ width: 400 }} />}
+
+					<p>{new Date(data.createdAt).toString()}</p>
+				</div>
+			);
+		}
+	}
+
 	return (
 		<div className="App">
 			<h1>My Notes App</h1>
-			<p>Hey {/*Auth.currentAuthenticatedUser()*/}, welcome to Quizzards!</p>
+			<p>Hey {user.user}, welcome to Quizzards!</p>
 			<button onClick={signOut}>Sign out</button>
 			<input
 				onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -151,22 +207,9 @@ function NotesPage(signOut) {
 				log
 			</button>
 			<div style={{ marginBottom: 30 }}>
-				{notes.map((note) => (
-					<div
-						key={note.id || note.name}
-						style={{
-							backgroundColor: "pink",
-							width: 600,
-							marginLeft: "auto",
-							marginRight: "auto",
-						}}
-					>
-						<h2>
-							{note.title} by {note.user}
-						</h2>
-						<p>{note.description}</p>
-						<button onClick={() => deleteNote(note)}>Delete note</button>
-						{note.image && <img src={note.image} style={{ width: 400 }} />}
+				{notes.map((post) => (
+					<div>
+						<MakePost data={post} />
 					</div>
 				))}
 			</div>
