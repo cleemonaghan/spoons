@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import logo from "./logo.svg";
+//import logo from "./logo.svg";
 import "./App.css";
 import { API, Auth, Storage } from "aws-amplify";
 import { withAuthenticator, Authenticator } from "@aws-amplify/ui-react";
@@ -23,20 +23,8 @@ const initialFormState = {
 	image: null,
 };
 
-function loadScreen(signOut, user) {
-	return (
-		<div className="App">
-			<header className="App-header">
-				<img src={logo} className="App-logo" alt="logo" />
-				<p>Hey {user.username}, welcome to Quizzards!</p>
-				<button onClick={signOut}>Sign out</button>
-			</header>
-		</div>
-	);
-}
-
 function NotesPage(signOut) {
-	const [user, setUser] = useState({ user: "" });
+	const [user, setUser] = useState({ username: "" });
 	//local varaiable holding all the posts we need to display
 	const [notes, setNotes] = useState([]);
 	//variable holding all the data entered in theform fields
@@ -49,8 +37,10 @@ function NotesPage(signOut) {
 	}, []);
 
 	async function getUser() {
-		let username = (await Auth.currentAuthenticatedUser()).username;
-		setUser({ user: username });
+		//let res = await Auth.currentAuthenticatedUser();
+		//console.log(res);
+		let user = (await Auth.currentAuthenticatedUser()).username;
+		setUser({ username: user });
 	}
 
 	async function fetchPosts() {
@@ -95,7 +85,7 @@ function NotesPage(signOut) {
 		//if the User did not enter a title, don't create a post
 		if (!formData.title) return;
 		//get the User's username and add it to the form data
-		formData.user = user.user;
+		formData.user = user.username;
 		//create a new Post using the form data
 		await API.graphql({
 			query: createPostMutation,
@@ -132,24 +122,18 @@ function NotesPage(signOut) {
 	function MakePost(props) {
 		const data = props.data;
 		//if it is not this User's post, don't allow them to delete it
-		if (user.user === data.user) {
+		if (user.username === data.user) {
 			return (
-				<div
-					key={data.id || data.name}
-					style={{
-						backgroundColor: "lightBlue",
-						width: 600,
-						marginLeft: "auto",
-						marginRight: "auto",
-					}}
-				>
+				<div>
 					<h2>
 						{data.title} by {data.user}
 					</h2>
 					<p>{data.description}</p>
 
 					<button onClick={() => deleteNote(data)}>Delete note</button>
-					{data.image && <img src={data.image} style={{ width: 400 }} />}
+					{data.image && (
+						<img src={data.image} alt="post_image" style={{ width: 400 }} />
+					)}
 
 					<p>{new Date(data.createdAt).toString()}</p>
 				</div>
@@ -157,20 +141,14 @@ function NotesPage(signOut) {
 		} else {
 			//console.log("B");
 			return (
-				<div
-					key={data.id || data.name}
-					style={{
-						backgroundColor: "lightBlue",
-						width: 600,
-						marginLeft: "auto",
-						marginRight: "auto",
-					}}
-				>
+				<div>
 					<h2>
 						{data.title} by {data.user}
 					</h2>
 					<p>{data.description}</p>
-					{data.image && <img src={data.image} style={{ width: 400 }} />}
+					{data.image && (
+						<img src={data.image} alt="post_image" style={{ width: 400 }} />
+					)}
 
 					<p>{new Date(data.createdAt).toString()}</p>
 				</div>
@@ -181,7 +159,7 @@ function NotesPage(signOut) {
 	return (
 		<div className="App">
 			<h1>My Notes App</h1>
-			<p>Hey {user.user}, welcome to Quizzards!</p>
+			<p>Hey {user.username}, welcome to Quizzards!</p>
 			<button onClick={signOut}>Sign out</button>
 			<input
 				onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -208,7 +186,15 @@ function NotesPage(signOut) {
 			</button>
 			<div style={{ marginBottom: 30 }}>
 				{notes.map((post) => (
-					<div>
+					<div
+						key={post.id || post.name}
+						style={{
+							backgroundColor: "lightBlue",
+							width: 600,
+							marginLeft: "auto",
+							marginRight: "auto",
+						}}
+					>
 						<MakePost data={post} />
 					</div>
 				))}
