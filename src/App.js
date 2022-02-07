@@ -9,6 +9,7 @@ import "@aws-amplify/ui-react/styles.css";
 //import { Post, Comment, Chat } from "./models";
 
 import { listPosts } from "./graphql/queries";
+//colin
 //import * as mutations from './graphql/mutations';
 import {
 	createPost as createPostMutation,
@@ -205,7 +206,10 @@ function NotesPage(signOut) {
 
 function App() {
 	return (
-		<Authenticator>{({ signOut, user }) => NotesPage(signOut)}</Authenticator>
+		<Authenticator>{({ signOut, user }) => {
+			NotesPage(signOut)}
+		}
+		</Authenticator>
 	);
 }
 
